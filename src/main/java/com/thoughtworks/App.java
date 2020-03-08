@@ -1,9 +1,8 @@
 package com.thoughtworks;
 
-import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
+//import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +56,7 @@ public class App {
 
   public static List<String> getTradersCity(List<Transaction> transactions) {
       return transactions.stream().map(t -> t.getTrader().getCity())
+          .distinct()
           .collect(Collectors.toList());
   }
 
@@ -70,6 +70,7 @@ public class App {
 
   public static List<String> getTradersName(List<Transaction> transactions) {
       return transactions.stream().map(t -> t.getTrader().getName())
+          .distinct()
           .sorted()
           .collect(Collectors.toList());
   }
