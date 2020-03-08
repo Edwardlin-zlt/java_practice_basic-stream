@@ -1,8 +1,13 @@
 package com.thoughtworks;
 
+import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
+
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -45,34 +50,48 @@ public class App {
   }
 
   public static List<Transaction> get2011Transactions(List<Transaction> transactions) {
-    return Collections.emptyList();
+     return transactions.stream().filter(transaction -> transaction.getYear()== 2011)
+         .sorted(Comparator.comparingInt(Transaction::getValue))
+         .collect(Collectors.toList());
   }
 
   public static List<String> getTradersCity(List<Transaction> transactions) {
-    return Collections.emptyList();
+      return transactions.stream().map(t -> t.getTrader().getCity())
+          .collect(Collectors.toList());
   }
 
   public static List<Trader> getCambridgeTraders(List<Transaction> transactions) {
-    return Collections.emptyList();
+      return transactions.stream().map(Transaction::getTrader)
+          .distinct()
+          .filter(t -> t.getCity().equals("Cambridge"))
+          .sorted(Comparator.comparing(Trader::getName))
+          .collect(Collectors.toList());
   }
 
   public static List<String> getTradersName(List<Transaction> transactions) {
-    return Collections.emptyList();
+      return transactions.stream().map(t -> t.getTrader().getName())
+          .sorted()
+          .collect(Collectors.toList());
   }
 
   public static boolean hasMilanTrader(List<Transaction> transactions) {
-    return false;
+      return transactions.stream().anyMatch(t -> Objects.equals(t.getTrader().getCity(), "Milan"));
   }
 
   public static List<Integer> getCambridgeTransactionsValue(List<Transaction> transactions) {
-    return Collections.emptyList();
+      return transactions.stream().filter(t -> Objects.equals(t.getTrader().getCity(), "Cambridge"))
+          .map(Transaction::getValue)
+          .collect(Collectors.toList());
   }
 
   public static int getMaxTransactionValue(List<Transaction> transactions) {
-    return 0;
+      return transactions.stream().map(Transaction::getValue)
+          .max(Integer::compareTo)
+          .orElse(0);
   }
 
   public static Transaction getMinTransaction(List<Transaction> transactions) {
-    return null;
+      return transactions.stream().min(Comparator.comparingInt(Transaction::getValue))
+          .orElseThrow(NoClassDefFoundError::new);
   }
 }
