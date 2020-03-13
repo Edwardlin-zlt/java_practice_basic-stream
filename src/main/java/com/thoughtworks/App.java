@@ -62,16 +62,16 @@ public class App {
 
   public static List<Trader> getCambridgeTraders(List<Transaction> transactions) {
       return transactions.stream().map(Transaction::getTrader)
-          .distinct()
           .filter(t -> t.getCity().equals("Cambridge"))
           .sorted(Comparator.comparing(Trader::getName))
+          .distinct()
           .collect(Collectors.toList());
   }
 
   public static List<String> getTradersName(List<Transaction> transactions) {
       return transactions.stream().map(t -> t.getTrader().getName())
-          .distinct()
           .sorted()
+          .distinct()
           .collect(Collectors.toList());
   }
 
@@ -85,14 +85,14 @@ public class App {
           .collect(Collectors.toList());
   }
 
-  public static int getMaxTransactionValue(List<Transaction> transactions) {
+  public static int getMaxTransactionValue(List<Transaction> transactions){
       return transactions.stream().map(Transaction::getValue)
           .max(Integer::compareTo)
-          .orElse(0);
+          .orElseThrow(RuntimeException::new);
   }
 
   public static Transaction getMinTransaction(List<Transaction> transactions) {
       return transactions.stream().min(Comparator.comparingInt(Transaction::getValue))
-          .orElseThrow(NoClassDefFoundError::new);
+          .orElse(null);
   }
 }
